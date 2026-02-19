@@ -1,8 +1,8 @@
 defmodule TiptapPhoenix.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
-  @source_url "https://github.com/danielres/tiptap_phoenix"
+  @version "0.1.1"
+  @source_url "https://github.com/wir-drei-digital/tiptap-phoenix"
 
   def project do
     [
