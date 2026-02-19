@@ -26,6 +26,17 @@ Add the npm package to your `assets/package.json`:
 }
 ```
 
+> **Note:** Because this is a `file:` dependency, npm will symlink it by default
+> and **not** install its transitive dependencies (like `@tiptap/core`, `tippy.js`, etc.).
+> To fix this, add `install-links=true` to your `assets/.npmrc`:
+>
+> ```
+> install-links=true
+> ```
+>
+> This tells npm to copy and fully resolve `file:` dependencies instead of
+> symlinking them, so all transitive dependencies are installed automatically.
+
 ## Setup
 
 ### JavaScript

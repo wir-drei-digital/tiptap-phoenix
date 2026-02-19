@@ -71,11 +71,61 @@ defmodule TiptapPhoenix.Renderer do
     end
   end
 
+  defp render_node(%{"type" => "table"} = node) do
+    inner = render_children(node["content"])
+    "<table>#{inner}</table>"
+  end
+
+  defp render_node(%{"type" => "tableRow"} = node) do
+    inner = render_children(node["content"])
+    "<tr>#{inner}</tr>"
+  end
+
+  defp render_node(%{"type" => "tableCell"} = node) do
+    attrs = cell_attrs(node)
+    inner = render_children(node["content"])
+    "<td#{attrs}>#{inner}</td>"
+  end
+
+  defp render_node(%{"type" => "tableHeader"} = node) do
+    attrs = cell_attrs(node)
+    inner = render_children(node["content"])
+    "<th#{attrs}>#{inner}</th>"
+  end
+
+  defp render_node(%{"type" => "details"} = node) do
+    inner = render_children(node["content"])
+    "<details>#{inner}</details>"
+  end
+
+  defp render_node(%{"type" => "detailsSummary"} = node) do
+    inner = render_inline(node["content"])
+    "<summary>#{inner}</summary>"
+  end
+
+  defp render_node(%{"type" => "detailsContent"} = node) do
+    inner = render_children(node["content"])
+    ~s(<div class="details-content">#{inner}</div>)
+  end
+
   defp render_node(%{"type" => "horizontalRule"}), do: "<hr>"
 
   defp render_node(%{"type" => "hardBreak"}), do: "<br>"
 
   defp render_node(_), do: ""
+
+  defp cell_attrs(node) do
+    []
+    |> maybe_span_attr("colspan", get_in(node, ["attrs", "colspan"]))
+    |> maybe_span_attr("rowspan", get_in(node, ["attrs", "rowspan"]))
+    |> Enum.join()
+  end
+
+  defp maybe_span_attr(attrs, name, value) when is_integer(value) and value > 1 do
+    attrs ++ [~s( #{name}="#{value}")]
+  end
+
+  defp maybe_span_attr(attrs, _name, _value), do: attrs
 
   defp render_children(nil), do: ""
 

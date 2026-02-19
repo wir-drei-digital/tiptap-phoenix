@@ -3,6 +3,30 @@ defmodule TiptapPhoenix.RendererTest do
 
   alias TiptapPhoenix.Renderer
 
+  # -- Test helpers for building TipTap JSON fixtures --
+
+  defp doc(content), do: %{"type" => "doc", "content" => List.wrap(content)}
+  defp p(text), do: %{"type" => "paragraph", "content" => [text(text)]}
+  defp text(t), do: %{"type" => "text", "text" => t}
+
+  defp table(rows), do: %{"type" => "table", "content" => rows}
+  defp tr(cells), do: %{"type" => "tableRow", "content" => cells}
+  defp td(content), do: %{"type" => "tableCell", "content" => List.wrap(content)}
+
+  defp td(content, attrs),
+    do: %{"type" => "tableCell", "attrs" => attrs, "content" => List.wrap(content)}
+
+  defp th(content), do: %{"type" => "tableHeader", "content" => List.wrap(content)}
+
+  defp th(content, attrs),
+    do: %{"type" => "tableHeader", "attrs" => attrs, "content" => List.wrap(content)}
+
+  defp details(content), do: %{"type" => "details", "content" => content}
+  defp details_summary(text), do: %{"type" => "detailsSummary", "content" => [text(text)]}
+
+  defp details_content(content),
+    do: %{"type" => "detailsContent", "content" => List.wrap(content)}
+
   describe "render/1" do
     test "renders a paragraph" do
       doc = %{
@@ -407,6 +431,104 @@ defmodule TiptapPhoenix.RendererTest do
       }
 
       assert Renderer.render(doc) =~ "<p>ok</p>"
+    end
+
+    test "renders table with header row and body cells" do
+      html =
+        doc(
+          table([
+            tr([th(p("Name")), th(p("Age"))]),
+            tr([td(p("Alice")), td(p("30"))])
+          ])
+        )
+        |> Renderer.render()
+
+      assert html =~ "<table>"
+      assert html =~ "<th><p>Name</p></th>"
+      assert html =~ "<th><p>Age</p></th>"
+      assert html =~ "<td><p>Alice</p></td>"
+      assert html =~ "<td><p>30</p></td>"
+      assert html =~ "</table>"
+    end
+
+    test "renders table cells with colspan and rowspan" do
+      html =
+        doc(
+          table([
+            tr([th(p("Wide"), %{"colspan" => 2, "rowspan" => 1})]),
+            tr([td(p("Tall"), %{"colspan" => 1, "rowspan" => 2}), td(p("Normal"))])
+          ])
+        )
+        |> Renderer.render()
+
+      assert html =~ ~s(<th colspan="2"><p>Wide</p></th>)
+      assert html =~ ~s(<td rowspan="2"><p>Tall</p></td>)
+      assert html =~ "<td><p>Normal</p></td>"
+    end
+
+    test "renders table without headers" do
+      html =
+        doc(table([tr([td(p("A1")), td(p("B1"))])]))
+        |> Renderer.render()
+
+      assert html =~ "<table>"
+      refute html =~ "<th>"
+      assert html =~ "<td><p>A1</p></td>"
+      assert html =~ "<td><p>B1</p></td>"
+    end
+
+    test "renders table cell without attrs key" do
+      html =
+        doc(table([tr([td(p("No attrs"))])]))
+        |> Renderer.render()
+
+      assert html =~ "<td><p>No attrs</p></td>"
+      refute html =~ "colspan"
+      refute html =~ "rowspan"
+    end
+
+    test "renders details with summary and content" do
+      html =
+        doc(
+          details([
+            details_summary("Click to expand"),
+            details_content(p("Hidden content"))
+          ])
+        )
+        |> Renderer.render()
+
+      assert html =~ "<details>"
+      assert html =~ "<summary>Click to expand</summary>"
+      assert html =~ ~s(<div class="details-content">)
+      assert html =~ "<p>Hidden content</p>"
+      assert html =~ "</details>"
+    end
+
+    test "renders details with nested content" do
+      html =
+        doc(
+          details([
+            details_summary("FAQ"),
+            details_content([
+              p("Answer paragraph"),
+              %{
+                "type" => "bulletList",
+                "content" => [
+                  %{
+                    "type" => "listItem",
+                    "content" => [p("Point one")]
+                  }
+                ]
+              }
+            ])
+          ])
+        )
+        |> Renderer.render()
+
+      assert html =~ "<summary>FAQ</summary>"
+      assert html =~ "<p>Answer paragraph</p>"
+      assert html =~ "<ul>"
+      assert html =~ "Point one"
     end
 
     test "ignores unknown mark types" do

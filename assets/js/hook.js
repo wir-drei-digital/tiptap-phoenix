@@ -6,6 +6,13 @@ import Link from "@tiptap/extension-link"
 import Underline from "@tiptap/extension-underline"
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight"
 import Typography from "@tiptap/extension-typography"
+import Table from "@tiptap/extension-table"
+import TableRow from "@tiptap/extension-table/row"
+import TableCell from "@tiptap/extension-table/cell"
+import TableHeader from "@tiptap/extension-table/header"
+import Details from "@tiptap/extension-details"
+import DetailsSummary from "@tiptap/extension-details/summary"
+import DetailsContent from "@tiptap/extension-details/content"
 import { common, createLowlight } from "lowlight"
 import { createSlashCommand } from "./extensions/slash_command"
 import { BubbleMenu } from "./extensions/bubble_menu"
@@ -69,6 +76,13 @@ export function createTiptapHook(options = {}) {
             lowlight,
           }),
           Typography,
+          Table.configure({ resizable: false }),
+          TableRow,
+          TableCell,
+          TableHeader,
+          Details,
+          DetailsSummary,
+          DetailsContent,
           slashCommandExt,
           BubbleMenu,
           DragHandle,

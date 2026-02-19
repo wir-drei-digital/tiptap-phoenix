@@ -150,6 +150,59 @@
   opacity: 0.8;
 }
 
+/* Tables */
+.ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  margin: 0;
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid var(--ttp-border);
+  padding: 0.5em 0.75em;
+  vertical-align: top;
+  position: relative;
+}
+
+.ProseMirror th {
+  background: var(--ttp-bg-muted);
+  font-weight: 600;
+  text-align: left;
+}
+
+.ProseMirror th > p,
+.ProseMirror td > p {
+  margin: 0;
+}
+
+.ProseMirror .selectedCell {
+  background: oklch(from var(--ttp-primary) l c h / 0.12);
+}
+
+/* Details / Summary (collapsible) */
+.ProseMirror details {
+  border: 1px solid var(--ttp-border);
+  border-radius: var(--ttp-radius);
+  padding: 0.5em 0.75em;
+}
+
+.ProseMirror details > summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: disclosure-closed;
+}
+
+.ProseMirror details[open] > summary {
+  list-style: disclosure-open;
+  margin-bottom: 0.5em;
+}
+
+.ProseMirror .details-content > * + * {
+  margin-top: 0.75em;
+}
+
 /* Selected node outline */
 .ProseMirror .ProseMirror-selectednode {
   outline: 2px solid var(--ttp-primary);

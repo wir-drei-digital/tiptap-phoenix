@@ -36,6 +36,12 @@ export const defaultCommands = [
   { title: "Divider", description: "Horizontal rule", icon: "&#8212;", command: ({ editor, range }) => {
     editor.chain().focus().deleteRange(range).setHorizontalRule().run()
   }},
+  { title: "Table", description: "Insert a table", icon: "&#9638;", command: ({ editor, range }) => {
+    editor.chain().focus().deleteRange(range).insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
+  }},
+  { title: "Toggle", description: "Collapsible section", icon: "&#9654;", command: ({ editor, range }) => {
+    editor.chain().focus().deleteRange(range).setDetails().run()
+  }},
 ]
 
 function filterCommands(items, query) {
