@@ -1,0 +1,9 @@
+/_build/
+/deps/
+/doc/
+*.beam
+*.ez
+erl_crash.dump
+*.swp
+.elixir_ls/
+assets/node_modules/

@@ -1,0 +1,21 @@
+{
+  "name": "tiptap-phoenix",
+  "version": "0.1.0",
+  "description": "Tiptap rich-text editor integration for Phoenix LiveView",
+  "main": "js/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@tiptap/core": "^2.11.0",
+    "@tiptap/pm": "^2.11.0",
+    "@tiptap/starter-kit": "^2.11.0",
+    "@tiptap/extension-placeholder": "^2.11.0",
+    "@tiptap/extension-image": "^2.11.0",
+    "@tiptap/extension-link": "^2.11.0",
+    "@tiptap/extension-underline": "^2.11.0",
+    "@tiptap/extension-code-block-lowlight": "^2.11.0",
+    "@tiptap/extension-typography": "^2.11.0",
+    "@tiptap/suggestion": "^2.11.0",
+    "lowlight": "^3.2.0",
+    "tippy.js": "^6.3.7"
+  }
+}
