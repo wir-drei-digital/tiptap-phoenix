@@ -15,7 +15,7 @@ import DetailsSummary from "@tiptap/extension-details-summary"
 import DetailsContent from "@tiptap/extension-details-content"
 import { common, createLowlight } from "lowlight"
 import { createSlashCommand } from "./extensions/slash_command"
-import { BubbleMenu } from "./extensions/bubble_menu"
+import { createBubbleMenu } from "./extensions/bubble_menu"
 import { DragHandle } from "./extensions/drag_handle"
 
 const lowlight = createLowlight(common)
@@ -26,10 +26,15 @@ const lowlight = createLowlight(common)
  * @param {Object} [options]
  * @param {Array}  [options.slashCommands] - Custom slash command items (defaults to defaultCommands)
  * @param {Array}  [options.extensions]    - Additional Tiptap extensions to include
+ * @param {Array}  [options.bubbleMenuExtras] - Extra items for the bubble menu (see createBubbleMenu)
  * @returns {Object} A Phoenix LiveView hook
  */
 export function createTiptapHook(options = {}) {
-  const { slashCommands, extensions: extraExtensions = [] } = options
+  const {
+    slashCommands,
+    extensions: extraExtensions = [],
+    bubbleMenuExtras = [],
+  } = options
 
   return {
     mounted() {
@@ -53,6 +58,10 @@ export function createTiptapHook(options = {}) {
       this._autoSaveTimer = null
 
       const slashCommandExt = createSlashCommand(slashCommands)
+      const bubbleMenuExt = createBubbleMenu({
+        extras: bubbleMenuExtras,
+        pushEvent: (event, payload) => this.pushEvent(event, payload),
+      })
 
       this.editor = new Editor({
         element: editorEl,
@@ -84,7 +93,7 @@ export function createTiptapHook(options = {}) {
           DetailsSummary,
           DetailsContent,
           slashCommandExt,
-          BubbleMenu,
+          bubbleMenuExt,
           DragHandle,
           ...extraExtensions,
         ],

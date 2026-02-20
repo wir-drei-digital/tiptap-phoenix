@@ -386,7 +386,7 @@ export const DragHandle = Extension.create({
       const blockRect = blockDom.getBoundingClientRect()
 
       handle.style.top = `${blockRect.top - containerRect.top}px`
-      handle.style.left = "-24px"
+      handle.style.left = "2px"
       handle.style.opacity = "1"
       handle.style.pointerEvents = "auto"
     }
