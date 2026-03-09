@@ -89,7 +89,7 @@ export function createTiptapHook(options = {}) {
           TableRow,
           TableCell,
           TableHeader,
-          Details,
+          Details.configure({ persist: true }),
           DetailsSummary,
           DetailsContent,
           slashCommandExt,

@@ -141,6 +141,22 @@ function createContextMenu(editor, blockPos, onAction) {
           action: () =>
             editor.chain().focus().setTextSelection(blockPos + 1).setCodeBlock().run(),
         },
+        {
+          label: "Toggle",
+          icon: "&#9654;",
+          action: () =>
+            editor.chain().focus().setTextSelection(blockPos + 1).setDetails().command(({ tr, state }) => {
+              const { $from } = state.selection
+              for (let d = $from.depth; d > 0; d--) {
+                const node = $from.node(d)
+                if (node.type.name === "details") {
+                  tr.setNodeMarkup($from.before(d), undefined, { ...node.attrs, open: true })
+                  return true
+                }
+              }
+              return true
+            }).run(),
+        },
       ],
     },
   ]

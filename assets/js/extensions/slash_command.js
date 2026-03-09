@@ -40,7 +40,18 @@ export const defaultCommands = [
     editor.chain().focus().deleteRange(range).insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
   }},
   { title: "Toggle", description: "Collapsible section", icon: "&#9654;", command: ({ editor, range }) => {
-    editor.chain().focus().deleteRange(range).setDetails().run()
+    editor.chain().focus().deleteRange(range).setDetails().command(({ tr, state }) => {
+      // Auto-open the newly created details block
+      const { $from } = state.selection
+      for (let d = $from.depth; d > 0; d--) {
+        const node = $from.node(d)
+        if (node.type.name === "details") {
+          tr.setNodeMarkup($from.before(d), undefined, { ...node.attrs, open: true })
+          return true
+        }
+      }
+      return true
+    }).run()
   }},
 ]
 
