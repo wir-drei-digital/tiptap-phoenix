@@ -49,6 +49,18 @@ defmodule TiptapPhoenix.Renderer do
     "<li>#{inner}</li>"
   end
 
+  defp render_node(%{"type" => "taskList"} = node) do
+    items = render_children(node["content"])
+    ~s(<ul data-type="taskList">\n#{items}\n</ul>)
+  end
+
+  defp render_node(%{"type" => "taskItem"} = node) do
+    checked = get_in(node, ["attrs", "checked"]) == true
+    checkbox_attr = if checked, do: " checked", else: ""
+    inner = render_children(node["content"])
+    ~s(<li data-type="taskItem"><input type="checkbox" disabled#{checkbox_attr}>#{inner}</li>)
+  end
+
   defp render_node(%{"type" => "blockquote"} = node) do
     inner = render_children(node["content"])
     "<blockquote>#{inner}</blockquote>"

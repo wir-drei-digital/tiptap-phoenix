@@ -21,6 +21,8 @@
     "@tiptap/extension-details": "^2.11.0",
     "@tiptap/extension-details-summary": "^2.11.0",
     "@tiptap/extension-details-content": "^2.11.0",
+    "@tiptap/extension-task-list": "^2.11.0",
+    "@tiptap/extension-task-item": "^2.11.0",
     "@tiptap/suggestion": "^2.11.0",
     "lowlight": "^3.2.0",
     "tippy.js": "^6.3.7"

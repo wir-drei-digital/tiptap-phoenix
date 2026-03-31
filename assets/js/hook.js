@@ -13,6 +13,8 @@ import TableHeader from "@tiptap/extension-table-header"
 import Details from "@tiptap/extension-details"
 import DetailsSummary from "@tiptap/extension-details-summary"
 import DetailsContent from "@tiptap/extension-details-content"
+import TaskList from "@tiptap/extension-task-list"
+import TaskItem from "@tiptap/extension-task-item"
 import { common, createLowlight } from "lowlight"
 import { createSlashCommand } from "./extensions/slash_command"
 import { createBubbleMenu } from "./extensions/bubble_menu"
@@ -92,6 +94,8 @@ export function createTiptapHook(options = {}) {
           Details.configure({ persist: true }),
           DetailsSummary,
           DetailsContent,
+          TaskList,
+          TaskItem.configure({ nested: true }),
           slashCommandExt,
           bubbleMenuExt,
           DragHandle,

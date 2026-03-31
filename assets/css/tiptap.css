@@ -122,6 +122,27 @@
     margin: 0;
 }
 
+/* Task lists */
+.ProseMirror ul[data-type="taskList"] {
+    list-style: none;
+    padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+}
+
+.ProseMirror ul[data-type="taskList"] li > label {
+    flex-shrink: 0;
+    margin-top: 0.25em;
+}
+
+.ProseMirror ul[data-type="taskList"] li > div {
+    flex: 1;
+}
+
 /* Blockquote */
 .ProseMirror blockquote {
     border-left: 3px solid var(--ttp-border);
