@@ -65,6 +65,17 @@ export function createTiptapHook(options = {}) {
         pushEvent: (event, payload) => this.pushEvent(event, payload),
       })
 
+      // If a caller passes their own codeBlock extension via `extensions`
+      // (e.g. one that extends CodeBlockLowlight to add language-specific
+      // previews), skip the default CodeBlockLowlight here. Otherwise both
+      // register the same keyed ProseMirror plugin (`codeBlockVSCodeHandler`,
+      // inherited from @tiptap/extension-code-block) and ProseMirror throws
+      // on construction, leaving a non-functional editor (no keyboard
+      // handling, no bubble menu, no drag handles).
+      const hasUserCodeBlock = extraExtensions.some(
+        (ext) => ext && ext.name === "codeBlock",
+      )
+
       this.editor = new Editor({
         element: editorEl,
         extensions: [
@@ -83,9 +94,9 @@ export function createTiptapHook(options = {}) {
             autolink: true,
           }),
           Underline,
-          CodeBlockLowlight.configure({
-            lowlight,
-          }),
+          ...(hasUserCodeBlock
+            ? []
+            : [CodeBlockLowlight.configure({ lowlight })]),
           Typography,
           Table.configure({ resizable: false }),
           TableRow,
